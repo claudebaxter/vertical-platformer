@@ -75,6 +75,26 @@ const player = new Player({
             frameRate: 2,
             frameBuffer: 3
         },
+        IdleLeft: {
+            imageSrc: './img/warrior/IdleLeft.png',
+            frameRate: 8,
+            frameBuffer: 3
+        },
+        RunLeft: {
+            imageSrc: './img/warrior/RunLeft.png',
+            frameRate: 8,
+            frameBuffer: 5
+        },
+        JumpLeft: {
+            imageSrc: './img/warrior/JumpLeft.png',
+            frameRate: 2,
+            frameBuffer: 3
+        },
+        FallLeft: {
+            imageSrc: './img/warrior/FallLeft.png',
+            frameRate: 2,
+            frameBuffer: 3
+        },
     }
 }) 
 
@@ -120,15 +140,29 @@ function animate() {
     if (keys.d.pressed) {
         player.switchSprite('Run');
         player.velocity.x = 2;
-    } else if (keys.a.pressed) player.velocity.x = -2;
-    else if (player.velocity.y === 0) {
-        player.switchSprite('Idle');
+        player.lastDirection = 'right';
+    } else if (keys.a.pressed) {
+        player.switchSprite('RunLeft');
+        player.velocity.x = -2;
+        player.lastDirection = 'left';
+    } else if (player.velocity.y === 0) {
+        if (player.lastDirection === 'right') {
+            player.switchSprite('Idle');
+        } else {
+            player.switchSprite('IdleLeft');
+        }  
     }
 
     if (player.velocity.y < 0) {
-        player.switchSprite('Jump');
+        if (player.lastDirection === 'right') {
+            player.switchSprite('Jump');
+        } else {
+            player.switchSprite('JumpLeft');
+        }
     } else if (player.velocity.y > 0) {
-        player.switchSprite('Fall');
+        if (player.lastDirection === 'right') {player.switchSprite('Fall');}
+        else {player.switchSprite('FallLeft')}
+        
     }
 
     c.restore();

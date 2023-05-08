@@ -17,6 +17,7 @@ class Player extends Sprite {
             height: 10
         }
         this.animations = animations
+        this.lastDirection = 'right'
 
         for (let key in this.animations) {
             const image = new Image();
