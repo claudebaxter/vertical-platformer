@@ -32,6 +32,14 @@ class Player extends Sprite {
 
             this.animations[key].image = image;
         }
+        this.camerabox = {
+            position: {
+                x: this.position.x,
+                y: this.position.y
+            },
+            width: 200,
+            height: 80
+        }
     }
     switchSprite(key) {
         if (this.image === this.animations[key].image || !this.loaded) return
@@ -41,9 +49,28 @@ class Player extends Sprite {
         this.frameBuffer = this.animations[key].frameBuffer;
         this.frameRate = this.animations[key].frameRate;
     }
+    updateCameraBox() {
+        this.camerabox = {
+            position: {
+                x: this.position.x - 55,
+                y: this.position.y
+            },
+            width: 200,
+            height: 80
+        }
+    }
     update() {
         this.updateFrames();
         this.updateHitbox();
+        this.updateCameraBox();
+
+        //draws hitbox around sprite image inside cropbox
+        c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        c.fillRect(
+            this.camerabox.position.x, 
+            this.camerabox.position.y, 
+            this.camerabox.width, 
+            this.camerabox.height);
 
         /*//draws out the crop box around sprite image frame
         c.fillStyle = 'rgba(0, 255, 0, 0.2';
