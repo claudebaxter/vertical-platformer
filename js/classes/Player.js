@@ -59,6 +59,30 @@ class Player extends Sprite {
             height: 80
         }
     }
+    checkForHorizontalCanvasCollision() {
+        if (this.hitbox.position.x + this.hitbox.width + this.velocity.x >= 576 ||
+            this.hitbox.position.x + this.velocity.x <= 0) {
+            this.velocity.x = 0;
+        }
+    }
+    shouldPanCameraToTheLeft({canvas, camera}) {
+        const cameraboxRightSide = this.camerabox.position.x + this.camerabox.width;
+        const scaledDownCanvasWidth = canvas.width / 4;
+        //stops panning camera right at end of map
+        if (cameraboxRightSide >= 576) return;
+                                                          //Math.abs makes camera.position.x always a positive number
+        if (cameraboxRightSide >= scaledDownCanvasWidth + Math.abs(camera.position.x)) {
+            camera.position.x -= this.velocity.x;
+        }
+    }
+    shouldPanCameraToTheRight({canvas, camera}) {
+        //stop camera from panning left of beginning of map
+        if (this.camerabox.position.x <= 0) return;
+
+        if(this.camerabox.position.x <= Math.abs(camera.position.x)) {
+            camera.position.x -= this.velocity.x;
+        }
+    }
     update() {
         this.updateFrames();
         this.updateHitbox();
