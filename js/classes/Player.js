@@ -1,5 +1,12 @@
 class Player extends Sprite {
-    constructor({position, collisionBlocks, platformCollisionBlocks, imageSrc, frameRate, scale = 0.5, animations}) {
+    constructor({
+        position, 
+        collisionBlocks, 
+        platformCollisionBlocks, 
+        imageSrc, 
+        frameRate, 
+        scale = 0.5, 
+        animations}) {
         super({ imageSrc, frameRate, scale })
         this.position = position
         this.velocity = {
@@ -104,6 +111,7 @@ class Player extends Sprite {
         this.position.y += this.velocity.y; 
     }
     checkForVerticalCollisions() {
+        //regular collision blocks
         for (let i = 0; i < this.collisionBlocks.length; i++) {
             const collisionBlock = this.collisionBlocks[i];
 
@@ -128,6 +136,26 @@ class Player extends Sprite {
                         this.hitbox.position.y - this.position.y;
 
                     this.position.y = collisionBlock.position.y + collisionBlock.height - offset + 0.01;
+                    break;
+                }
+            }
+        }
+        //platform collision blocks
+        for (let i = 0; i < this.platformCollisionBlocks.length; i++) {
+            const platformCollisionBlock = this.platformCollisionBlocks[i];
+
+            if (
+                platformCollision({
+                    object1: this.hitbox,
+                    object2: platformCollisionBlock
+                })
+            ) {
+                if (this.velocity.y > 0) {
+                    this.velocity.y = 0;
+
+                    const offset = this.hitbox.position.y - this.position.y + this.hitbox.height;
+
+                    this.position.y = platformCollisionBlock.position.y - offset - 0.01;
                     break;
                 }
             }
