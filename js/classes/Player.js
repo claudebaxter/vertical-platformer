@@ -83,18 +83,32 @@ class Player extends Sprite {
             camera.position.x -= this.velocity.x;
         }
     }
+    shouldPanCameraDown({canvas, camera}) {
+        if (this.camerabox.position.y + this.velocity.y <= 0) return;
+
+        if (this.camerabox.position.y <= Math.abs(camera.position.y)) {
+            camera.position.y -= this.velocity.y;
+        }
+    }
+    shouldPanCameraUp({canvas, camera}) {
+        if (this.camerabox.position.y + this.camerabox.height + this.velocity.y >= 432) return;
+        const scaledCanvasHeight = canvas.height / 4;
+        if (this.camerabox.position.y + this.camerabox.height >= Math.abs(camera.position.y) + scaledCanvasHeight) {
+            camera.position.y -= this.velocity.y;
+        }
+    }
     update() {
         this.updateFrames();
         this.updateHitbox();
         this.updateCameraBox();
 
         //draws hitbox around sprite image inside cropbox
-        c.fillStyle = 'rgba(0, 0, 255, 0.2)'
+        /*c.fillStyle = 'rgba(0, 0, 255, 0.2)'
         c.fillRect(
             this.camerabox.position.x, 
             this.camerabox.position.y, 
             this.camerabox.width, 
-            this.camerabox.height);
+            this.camerabox.height);*/
 
         /*//draws out the crop box around sprite image frame
         c.fillStyle = 'rgba(0, 255, 0, 0.2';
